@@ -3,7 +3,7 @@ import "./App.css";
 import { Nav } from "./Components/Nav";
 import { Route } from "react-router-dom";
 import About from "./Pages/AboutPage";
-import Home from "./Pages/Home";
+import ContactUs from "./Pages/ContactUs";
 import Profile from "./Pages/Profile";
 import landingPage from "./Pages/LandingPage";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -28,7 +28,7 @@ function App() {
       <Route path="/" exact component={landingPage} />
       <Route path="/profile" exact component={Profile} />
       <Route path="/about" exact component={About} />
-      <Route path="/home" exact component={Home} />
+      <Route path="/contact-us" exact component={ContactUs} />
     </div>
   );
 }
