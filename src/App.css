@@ -6,3 +6,19 @@ h5,
 h6 {
   font-family: "Quicksand", sans-serif;
 }
+
+.profileImg {
+  width: 100px;
+  height: 100px;
+}
+.box {
+  border: 2px solid rgb(22, 22, 22);
+  border-radius: 8px;
+}
+.highlight {
+  opacity: 0.8;
+}
+.highlight:hover {
+  opacity: 1;
+  cursor: pointer;
+}
