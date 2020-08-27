@@ -1,8 +1,29 @@
-import React, { Component } from "react";
-
+import React, { Component, useState } from "react";
+import { api } from "../axios";
 class CustomerModal extends Component {
-  state = {};
+  state = {
+    Name: "",
+    PhoneNumber: "",
+  };
   render() {
+    const Api = api;
+    function handelEditCustomerInfo() {
+      Api.put("customers");
+    }
+    const handelDeleteCustomer = async () => {
+      const res = await Api.delete("customers" + "/" + this.props.customer.id);
+      console.log(res.data);
+    };
+    const handleChange = (event) => {
+      if (event.target.name === "NameChange") {
+        this.setState({ Name: event.target.value });
+      }
+      if (event.target.name === "PhoneChange") {
+        this.setState({ PhoneNumber: event.target.value });
+      } else {
+        console.log("fail");
+      }
+    };
     return (
       <div className="modal fade" id="exampleModal">
         <div className="modal-dialog">
@@ -33,6 +54,9 @@ class CustomerModal extends Component {
               <div className="col-6 p-0 m-auto">
                 <label className="p-0 m-0 px-2 mx-2">Name</label> <br />
                 <input
+                  value={this.state.Name}
+                  name="NameChange"
+                  onChange={handleChange}
                   className="p-2 m-2 w-100"
                   type="text"
                   placeholder={this.props.customer.name}
@@ -41,6 +65,9 @@ class CustomerModal extends Component {
                 <label className="p-0 m-0 px-2 mx-2">Phone number</label>
                 <br />
                 <input
+                  value={this.state.PhoneNumber}
+                  name="PhoneChange"
+                  onChange={handleChange}
                   className="p-2 m-2 w-100"
                   type="text"
                   placeholder={this.props.customer.phone}
@@ -62,10 +89,16 @@ class CustomerModal extends Component {
               </div>
             </div>
             <div className="modal-footer">
-              <button type="button" className="btn btn-success">
+              <button
+                onClick={handelEditCustomerInfo}
+                type="button"
+                className="btn 
+              btn-success"
+              >
                 Save changes
               </button>
               <button
+                onClick={handelDeleteCustomer}
                 type="button"
                 className="btn btn-danger"
                 data-dismiss="modal"

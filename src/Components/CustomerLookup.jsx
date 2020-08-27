@@ -32,6 +32,7 @@ const CustomerLookUp = () => {
     name: "",
     phone: "",
     points: "",
+    id: null,
   });
   const [nameFeild, setnameFeild] = useState("");
   const [nameFeildVisable, setnameFeildVisable] = useState(false);
@@ -266,17 +267,17 @@ const CustomerLookUp = () => {
             <div className="customer-list my-1 p-md-4 text-large  ">
               {customers.length > 0 ? (
                 <div className="row">
-                  <div className="col-4">
+                  <div className="col">
                     <label>Name</label>
                   </div>
-                  <div className="col-4">
+                  <div className="col">
                     <label>Phone</label>
                   </div>
                 </div>
               ) : (
                 <div>No account matches {formatPhoneNumber(phoneNumber)}</div>
               )}
-              <div className="row">
+              <div className="row p-1">
                 <div className="col-12">
                   <hr />
                 </div>
@@ -286,12 +287,13 @@ const CustomerLookUp = () => {
                   return (
                     <div
                       key={index}
-                      className="row highlight"
+                      className="row highlight mx-3 p-1 bg-secondary"
                       onClick={() =>
                         setSelectedCustomer({
                           name: customer.name,
                           phone: formatPhoneNumber(customer.phoneNumber),
                           points: customer.points,
+                          id: customer.id,
                         })
                       }
                       // @ts-ignore
@@ -299,16 +301,14 @@ const CustomerLookUp = () => {
                       data-toggle="modal"
                       data-target="#exampleModal"
                     >
-                      {customer.key % 2 == 0 ? (
-                        <div className="bg-secondary"></div>
-                      ) : (
-                        <div className="bg-secondary"></div>
-                      )}
-                      <div className="col bg-dark">
+                      <div className="col-4  ml-3 p-2 bg-light">
                         <h6>{customer.name}</h6>
                       </div>
-                      <div className="col">
+                      <div className="col-5  p-2 bg-light">
                         <h6>{formatPhoneNumber(customer.phoneNumber)}</h6>
+                      </div>
+                      <div className="col mr-3 p-1 bg-light">
+                        <h6>{formatPhoneNumber(customer.points || "10")}</h6>
                       </div>
                     </div>
                   );
