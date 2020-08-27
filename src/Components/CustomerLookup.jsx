@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { api } from "../axios";
+import CustomerModal from "./CustomerModal";
 
 let phoneNumber = ""; //(123)123-3456
 let formatPhoneNumber = (str) => {
@@ -23,37 +24,71 @@ let formatPhoneNumber = (str) => {
 };
 
 const CustomerLookUp = () => {
-  const [customers, setcustomers] = useState([
-    { id: 0, Name: "Justin", PhoneNumber: "2086954231" },
-    { id: 1, Name: "Steve", PhoneNumber: "208123456" },
-  ]);
+  const [customers, setcustomers] = useState([]);
+
   const [phoneNumberQuery, setPhoneNumberQuery] = useState("");
+
+  const [selectedCustomer, setSelectedCustomer] = useState({
+    name: "",
+    phone: "",
+    points: "",
+  });
+  const [nameFeild, setnameFeild] = useState("");
+  const [nameFeildVisable, setnameFeildVisable] = useState(false);
+
+  // function HandlesetSelectedCustomer(name, phone) {
+  //   setSelectedCustomer({ name: name, phone: phone });
+  // }
 
   const removeLastDidget = () => {
     phoneNumber = phoneNumber.slice(0, phoneNumber.length - 1);
     setPhoneNumberQuery(phoneNumber);
-    makeRequest();
+    GetCustomers();
   };
   const addToNumber = (event) => {
     phoneNumber += event.target.value;
     setPhoneNumberQuery(phoneNumber);
-    makeRequest();
+    GetCustomers();
   };
   const ClearNumber = () => {
     phoneNumber = "";
     setPhoneNumberQuery(phoneNumber);
-    makeRequest();
+    GetCustomers();
   };
 
-  async function makeRequest() {
+  async function GetCustomers() {
     try {
-      let res = await api.post("customers", phoneNumberQuery); //NOTE this is actually a get request!!
+      let res = await api.post("customers/get", {
+        PhoneNumber: phoneNumberQuery,
+      }); //NOTE this is actually a get request!!
       console.log(JSON.stringify(res.data));
       setcustomers(res.data);
+      console.log(res.data);
     } catch (error) {
       console.error(error);
     }
   }
+  const handleNameFeild = (event) => {
+    setnameFeild(event.target.value);
+  };
+  const handleNameFeildVisable = () => {
+    setnameFeildVisable(!nameFeildVisable);
+  };
+
+  async function handleCreateCustomer() {
+    console.log("posting....");
+    let data = {
+      Phonenumber: phoneNumberQuery,
+      Name: nameFeild,
+    };
+    try {
+      let res = await api.post("customers/add", data);
+      console.log(res.data);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <div className="col-12 col-xl-6 p-2 px-md-4">
       <div
@@ -187,12 +222,43 @@ const CustomerLookUp = () => {
           </div>
         </div>
 
-        <div className="d-flex align-items-center justify-content-center">
-          <input
-            className="p-2 m-2"
-            value={formatPhoneNumber(phoneNumberQuery)}
-          />
-          <button className="btn btn-success m-2 p-2">New</button>
+        <div className="d-flex flex-column align-items-center justify-content-center">
+          <div>
+            <input
+              className="p-2 m-2"
+              value={formatPhoneNumber(phoneNumberQuery) || "phone number"}
+            />
+            <button
+              className="btn btn-success m-2 p-2"
+              onClick={handleNameFeildVisable}
+            >
+              New
+            </button>
+          </div>
+
+          {nameFeildVisable ? (
+            <div>
+              <input
+                className=" p-2 m-2"
+                value={nameFeild}
+                placeholder="Customer name"
+                type="text"
+                onChange={handleNameFeild}
+              />{" "}
+              {nameFeild.length >= 2 && phoneNumberQuery.length >= 10 ? (
+                <button
+                  className="btn btn-success"
+                  onClick={handleCreateCustomer}
+                >
+                  Submit
+                </button>
+              ) : (
+                <span></span>
+              )}
+            </div>
+          ) : (
+            <span></span>
+          )}
         </div>
         <div className="text-left ">
           <h4 className=""> Customers</h4>
@@ -221,13 +287,28 @@ const CustomerLookUp = () => {
                     <div
                       key={index}
                       className="row highlight"
-                      onClick={() => console.log("clicked", index)}
+                      onClick={() =>
+                        setSelectedCustomer({
+                          name: customer.name,
+                          phone: formatPhoneNumber(customer.phoneNumber),
+                          points: customer.points,
+                        })
+                      }
+                      // @ts-ignore
+                      type="button"
+                      data-toggle="modal"
+                      data-target="#exampleModal"
                     >
-                      <div className="col-4">
-                        <label>{customer.Name}</label>
+                      {customer.key % 2 == 0 ? (
+                        <div className="bg-secondary"></div>
+                      ) : (
+                        <div className="bg-secondary"></div>
+                      )}
+                      <div className="col bg-dark">
+                        <h6>{customer.name}</h6>
                       </div>
-                      <div className="col-4">
-                        <label>{customer.PhoneNumber}</label>
+                      <div className="col">
+                        <h6>{formatPhoneNumber(customer.phoneNumber)}</h6>
                       </div>
                     </div>
                   );
@@ -235,34 +316,17 @@ const CustomerLookUp = () => {
               ) : (
                 <div className="row">
                   <div className="col-12">
-                    <label className="p-0 m-0" htmlFor="">
-                      Name
-                    </label>
-                    <br />
-                    <input type="text" placeholder="John doe" />
-                  </div>
-                  <br />
-                  <div className="col-12 pt-3">
-                    <label className="p-0 m-0">Phone number</label>
-                    <div className="col-12">
-                      <span className="border-bottom">
-                        {phoneNumber.length > 0 ? (
-                          <label className="text-dark">{phoneNumber}</label>
-                        ) : (
-                          <label className="text-secondary">
-                            {"(123)456-7890"}
-                          </label>
-                        )}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="col-12">
-                    <button className="fa fa-plus btn btn-primary"></button>
+                    <span></span>
                   </div>
                 </div>
               )}
             </div>
           </div>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col-12">
+          <CustomerModal customer={selectedCustomer} />
         </div>
       </div>
     </div>
