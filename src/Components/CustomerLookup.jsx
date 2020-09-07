@@ -37,6 +37,7 @@ const CustomerLookUp = () => {
   const [selectedCustomer, setSelectedCustomer] = useState({
     name: "",
     phone: "",
+    creatorEmail: "",
     points: "",
   });
   const [nameFeild, setnameFeild] = useState("");
@@ -81,8 +82,9 @@ const CustomerLookUp = () => {
 
   async function handleCreateCustomer() {
     let data = {
-      PhoneNumber: phoneNumberQuery,
-      Name: nameFeild,
+      phoneNumber: phoneNumberQuery,
+      name: nameFeild,
+      creatorEmail: "notSet",
     };
     try {
       let res = await api.post("customers", data);
@@ -295,8 +297,9 @@ const CustomerLookUp = () => {
                       className="row highlight mx-3 p-1 bg-secondary"
                       onClick={() =>
                         setSelectedCustomer({
-                          name: customer.Name,
+                          name: customer.name,
                           phone: formatPhoneNumber(customer.PhoneNumber),
+                          creatorEmail: "",
                           points: customer.points,
                         })
                       }
@@ -306,15 +309,15 @@ const CustomerLookUp = () => {
                       data-target="#exampleModal"
                     >
                       <div className="col-4  ml-3 p-2 bg-light">
-                        <h6>{customer.Name}</h6>
+                        <h6>{customer.name}</h6>
                       </div>
                       <div className="col-5  p-2 bg-light">
                         <h6>
-                          {formatPhoneNumber(customer.PhoneNumber || null)}
+                          {formatPhoneNumber(customer.phoneNumber || null)}
                         </h6>
                       </div>
                       <div className="col mr-3 p-1 bg-light">
-                        <h6>{formatPhoneNumber(customer.points || "0")}</h6>
+                        <h6>{customer.points || "0"}</h6>
                       </div>
                     </div>
                   );

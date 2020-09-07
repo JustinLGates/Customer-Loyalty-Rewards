@@ -5,7 +5,7 @@ const Customer = new Schema(
   {
     name: { type: String, required: true },
     phoneNumber: { type: String, reqired: true },
-    creatorEmail: { type: String, required: true },
+    creatorEmail: { type: String },
     points: { type: Number, default: 0 },
   },
   { timestamps: true, toJSON: { virtuals: true } }

@@ -2,6 +2,7 @@ import BaseController from "../utils/BaseController";
 import auth0Provider from "@bcwdev/auth0provider";
 import { customersService } from "../services/CustomersService";
 import { query } from "express";
+import { BadRequest } from "../utils/Errors";
 
 export class CustomersController extends BaseController {
   constructor() {
@@ -16,8 +17,9 @@ export class CustomersController extends BaseController {
   }
   async create(req, res, next) {
     try {
+      req.body.creatorEmail = req.userInfo.email;
+      console.log(req.body.creatorEmail);
       let data = await customersService.create(req.body);
-
       if (req.UserInfo) {
         res.send(JSON.stringify(req.UserInfo));
       }
@@ -29,8 +31,10 @@ export class CustomersController extends BaseController {
   async find(req, res, next) {
     try {
       let { phoneNumber } = req.query;
-      console.log(phoneNumber || "hello");
-      let data = await customersService.find((phoneNumber = {}));
+      let data = await customersService.find(
+        phoneNumber || {},
+        req.userInfo.email
+      );
       res.send(data);
     } catch (error) {
       next(error);

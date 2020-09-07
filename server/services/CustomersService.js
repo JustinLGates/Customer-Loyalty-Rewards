@@ -6,8 +6,12 @@ class CustomersService {
     let res = await dbContext.Customer.create(data);
     return res;
   }
-  find(query) {
-    let data = dbContext.Customer.find(query);
+  find(phoneNumQuery, email) {
+    console.log(email);
+    let data = dbContext.Customer.find({
+      creatorEmail: email,
+      phoneNumber: { $regex: ".*" + phoneNumQuery + ".*" },
+    });
     if (!data) {
       throw new BadRequest("No data");
     }
