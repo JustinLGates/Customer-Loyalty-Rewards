@@ -1,21 +1,26 @@
 import BaseController from "../utils/BaseController";
 import auth0Provider from "@bcwdev/auth0provider";
-import { notesService } from "../services/NotesService";
+import { customersService } from "../services/CustomersService";
+import { query } from "express";
 
-export class NotesController extends BaseController {
+export class CustomersController extends BaseController {
   constructor() {
-    super("api/notes");
+    super("api/customers");
     this.router
+      .use(auth0Provider.getAuthorizedUserInfo)
+      .post("", this.create)
       .get("", this.find)
       .get("/:id", this.findById)
-      .use(auth0Provider.getAuthorizedUserInfo)
       .put("/:id", this.edit)
-      .post("", this.create)
       .delete("/:id", this.delete);
   }
   async create(req, res, next) {
     try {
-      let data = await notesService.create(req.body);
+      let data = await customersService.create(req.body);
+
+      if (req.UserInfo) {
+        res.send(JSON.stringify(req.UserInfo));
+      }
       res.send(data);
     } catch (error) {
       next(error);
@@ -23,7 +28,9 @@ export class NotesController extends BaseController {
   }
   async find(req, res, next) {
     try {
-      let data = await notesService.find();
+      let { phoneNumber } = req.query;
+      console.log(phoneNumber || "hello");
+      let data = await customersService.find((phoneNumber = {}));
       res.send(data);
     } catch (error) {
       next(error);
@@ -31,7 +38,7 @@ export class NotesController extends BaseController {
   }
   async findById(req, res, next) {
     try {
-      let data = await notesService.findById(req.params.id);
+      let data = await customersService.findById(req.params.id);
       res.send(data);
     } catch (error) {
       next(error);
@@ -39,7 +46,7 @@ export class NotesController extends BaseController {
   }
   async edit(req, res, next) {
     try {
-      let data = await notesService.edit(req.params.id, req.body);
+      let data = await customersService.edit(req.params.id, req.body);
       res.send(data);
     } catch (error) {
       next(error);
@@ -47,7 +54,7 @@ export class NotesController extends BaseController {
   }
   async delete(req, res, next) {
     try {
-      let data = await notesService.delete(req.params.id);
+      let data = await customersService.delete(req.params.id);
       res.send(data);
     } catch (error) {
       next(error);

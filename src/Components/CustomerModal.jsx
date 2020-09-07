@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { api } from "../axios";
 class CustomerModal extends Component {
   state = {
@@ -11,7 +11,7 @@ class CustomerModal extends Component {
       Api.put("customers");
     }
     const handelDeleteCustomer = async () => {
-      const res = await Api.delete("customers" + "/" + this.props.customer.id);
+      const res = await Api.delete("customers" + this.props.customer.id);
       console.log(res.data);
     };
     const handleChange = (event) => {

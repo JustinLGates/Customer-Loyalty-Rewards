@@ -1,19 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 import { useAuth0 } from "@auth0/auth0-react";
-import { api } from "../axios";
+
 import CustomerLookUp from "../Components/CustomerLookup";
-import CustomerModal from "../Components/CustomerModal";
 
 const Profile = () => {
-  async function makeRequest() {
-    try {
-      let res = await api.get("customers"); // pass phone number......
-      console.log(JSON.stringify(res.data));
-    } catch (error) {
-      console.error(error);
-    }
-  }
-  const { user, isAuthenticated } = useAuth0();
+  // async function makeRequest() {
+  //   try {
+  //     let res = await api.get("customers"); // pass phone number......
+  //     console.log(JSON.stringify(res.data));
+  //   } catch (error) {
+  //     console.error(error);
+  //   }
+  // }
+  const { isAuthenticated } = useAuth0();
   return (
     isAuthenticated && (
       <div className="container-fluid">

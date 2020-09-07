@@ -9,7 +9,7 @@ import cleanupService from "./services/TestCleanupService";
 export default class Startup {
   static ConfigureGlobalMiddleware(app) {
     // NOTE Configure and Register Middleware
-    let whitelist = ["http://localhost:3000,3001"];
+    let whitelist = ["http://localhost:3000"];
     let corsOptions = {
       origin: function (origin, callback) {
         let originIsWhitelisted = whitelist.indexOf(origin) !== -1;

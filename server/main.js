@@ -7,7 +7,7 @@ import DbContext from "./db/DbConfig";
 const app = express();
 const socketServer = require("http").createServer(app);
 const io = require("socket.io")(socketServer);
-const port = process.env.PORT || 3000;
+const port = process.env.SERVER_PORT || 5000;
 
 //Establish Socket
 Socket.setIO(io);

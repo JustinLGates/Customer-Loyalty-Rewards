@@ -4,15 +4,20 @@ import CustomerModal from "./CustomerModal";
 
 let phoneNumber = ""; //(123)123-3456
 let formatPhoneNumber = (str) => {
+  if (str == null) {
+    return "";
+  }
+
   let num = "";
+
   for (let i = 0; i < str.length; i++) {
-    if (i == 0 && str.length > 3 && str[0] !== "(") {
+    if (i === 0 && str.length > 3 && str[0] !== "(") {
       num += "(";
     }
-    if (i == 3 && str.length > 3 && str[4] != ")") {
+    if (i === 3 && str.length > 3 && str[4] !== ")") {
       num += ")";
     }
-    if (i == 6 && str[6] != "-" && str.length > 6) {
+    if (i === 6 && str[6] !== "-" && str.length > 6) {
       num += "-";
     }
     num += str[i];
@@ -20,6 +25,7 @@ let formatPhoneNumber = (str) => {
       return num;
     }
   }
+
   return num;
 };
 
@@ -32,7 +38,6 @@ const CustomerLookUp = () => {
     name: "",
     phone: "",
     points: "",
-    id: null,
   });
   const [nameFeild, setnameFeild] = useState("");
   const [nameFeildVisable, setnameFeildVisable] = useState(false);
@@ -44,24 +49,22 @@ const CustomerLookUp = () => {
   const removeLastDidget = () => {
     phoneNumber = phoneNumber.slice(0, phoneNumber.length - 1);
     setPhoneNumberQuery(phoneNumber);
-    GetCustomers();
+    GetCustomers(phoneNumber);
   };
   const addToNumber = (event) => {
     phoneNumber += event.target.value;
     setPhoneNumberQuery(phoneNumber);
-    GetCustomers();
+    GetCustomers(phoneNumber);
   };
   const ClearNumber = () => {
     phoneNumber = "";
     setPhoneNumberQuery(phoneNumber);
-    GetCustomers();
+    GetCustomers(phoneNumber);
   };
 
-  async function GetCustomers() {
+  async function GetCustomers(phoneNumber) {
     try {
-      let res = await api.post("customers/get", {
-        PhoneNumber: phoneNumberQuery,
-      }); //NOTE this is actually a get request!!
+      let res = await api.get(`customers/?phoneNumber=${phoneNumber}`);
       console.log(JSON.stringify(res.data));
       setcustomers(res.data);
       console.log(res.data);
@@ -77,13 +80,12 @@ const CustomerLookUp = () => {
   };
 
   async function handleCreateCustomer() {
-    console.log("posting....");
     let data = {
-      Phonenumber: phoneNumberQuery,
+      PhoneNumber: phoneNumberQuery,
       Name: nameFeild,
     };
     try {
-      let res = await api.post("customers/add", data);
+      let res = await api.post("customers", data);
       console.log(res.data);
     } catch (error) {
       console.error(error);
@@ -226,6 +228,7 @@ const CustomerLookUp = () => {
         <div className="d-flex flex-column align-items-center justify-content-center">
           <div>
             <input
+              readOnly
               className="p-2 m-2"
               value={formatPhoneNumber(phoneNumberQuery) || "phone number"}
             />
@@ -275,7 +278,9 @@ const CustomerLookUp = () => {
                   </div>
                 </div>
               ) : (
-                <div>No account matches {formatPhoneNumber(phoneNumber)}</div>
+                <div>
+                  No account matches {formatPhoneNumber(phoneNumber) || ""}
+                </div>
               )}
               <div className="row p-1">
                 <div className="col-12">
@@ -290,10 +295,9 @@ const CustomerLookUp = () => {
                       className="row highlight mx-3 p-1 bg-secondary"
                       onClick={() =>
                         setSelectedCustomer({
-                          name: customer.name,
-                          phone: formatPhoneNumber(customer.phoneNumber),
+                          name: customer.Name,
+                          phone: formatPhoneNumber(customer.PhoneNumber),
                           points: customer.points,
-                          id: customer.id,
                         })
                       }
                       // @ts-ignore
@@ -302,13 +306,15 @@ const CustomerLookUp = () => {
                       data-target="#exampleModal"
                     >
                       <div className="col-4  ml-3 p-2 bg-light">
-                        <h6>{customer.name}</h6>
+                        <h6>{customer.Name}</h6>
                       </div>
                       <div className="col-5  p-2 bg-light">
-                        <h6>{formatPhoneNumber(customer.phoneNumber)}</h6>
+                        <h6>
+                          {formatPhoneNumber(customer.PhoneNumber || null)}
+                        </h6>
                       </div>
                       <div className="col mr-3 p-1 bg-light">
-                        <h6>{formatPhoneNumber(customer.points || "10")}</h6>
+                        <h6>{formatPhoneNumber(customer.points || "0")}</h6>
                       </div>
                     </div>
                   );
