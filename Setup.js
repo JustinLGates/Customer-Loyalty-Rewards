@@ -2,8 +2,8 @@ import fs from "fs";
 import BaseController from "./server/utils/BaseController";
 
 export class Paths {
-  static get Public() {
-    return __dirname + "/build/static";
+  static get dirname() {
+    return __dirname;
   }
   static get Server() {
     return __dirname + "/server";

@@ -5,7 +5,7 @@ import helmet from "helmet";
 import { RegisterControllers, Paths } from "../Setup";
 import auth0Provider from "@bcwdev/auth0provider";
 import cleanupService from "./services/TestCleanupService";
-
+import path from "path";
 export default class Startup {
   static ConfigureGlobalMiddleware(app) {
     // NOTE Configure and Register Middleware
@@ -32,7 +32,16 @@ export default class Startup {
     let router = express.Router();
     RegisterControllers(router);
     app.use(router);
-    app.use("", express.static(Paths.Public));
+
+    app.use(express.static(path.join(Paths.dirname, "client", "build")));
+
+    app.get("*", (req, res) => {
+      res.sendFile(path.join(Paths.dirname, "build", "index.html"));
+    });
+    app.listen();
+
+    // app.use("/", express.static(Paths.Public));
+
     app.get("/cleanup", async (req, res, next) => {
       try {
         let data = await cleanupService.cleanupAsync();
@@ -52,8 +61,9 @@ export default class Startup {
         res.status(404);
         next();
       },
-      express.static(Paths.Public + "404")
+      express.static(Paths.dirname + "/client/404")
     );
+
     // NOTE Default Error Handler
     app.use((error, req, res, next) => {
       if (!error.status) {
