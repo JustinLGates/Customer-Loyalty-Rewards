@@ -3,7 +3,7 @@ import BaseController from "./server/utils/BaseController";
 
 export class Paths {
   static get Public() {
-    return __dirname + "/public/";
+    return __dirname + "/build";
   }
   static get Server() {
     return __dirname + "/server";
