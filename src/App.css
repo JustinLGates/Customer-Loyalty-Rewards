@@ -24,9 +24,22 @@ h6 {
 }
 
 .num-box {
-  width: 10vh;
-  height: 10vh;
+  transition: 0.2s;
+  width: 9vh;
+  height: 9vh;
+  margin: 0.5vh;
   font-size: large;
   border-radius: 12px;
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.5), 4px 4px 6px rgba(0, 0, 0, 0.3);
+  box-shadow: 2px 2px 2px rgb(114, 114, 114);
+}
+
+.num-box:hover {
+  transition: 0.2s;
+  width: 10vh;
+  height: 10vh;
+  margin: 0vh;
+  font-size: x-large;
+  border-radius: 12px;
+  box-shadow: 2px 2px 2px rgb(114, 114, 114),
+    6px 6px 8px rgba(59, 59, 59, 0.452);
 }

@@ -17,16 +17,16 @@ const Profile = () => {
     isAuthenticated && (
       <div className="container-fluid">
         <div className="row">
-          <div className="col-md-6 col-12">
-            {/* <div className="p-2 m-2">
+          {/* <div className="col-md-6 col-12">
+            <div className="p-2 m-2">
               <img className="profileImg" src={user.picture} alt={user.name} />
               <h2>{user.nickname}</h2>
               <p>{user.email}</p>
-            </div> */}
-            {/* <button className="btn btn-dark" onClick={makeRequest}>
+            </div>
+            <button className="btn btn-dark" onClick={makeRequest}>
               Make api request
-            </button> */}
-          </div>
+            </button>
+          </div> */}
           <CustomerLookUp />
         </div>
       </div>

@@ -106,7 +106,7 @@ const CustomerLookUp = () => {
   }
 
   return (
-    <div className="col-12 col-xl-6 p-2 px-md-4">
+    <div className="col-12 col-md-10 col-xl-6 m-auto">
       <div
         className="p-2 m-2
 
@@ -115,7 +115,7 @@ const CustomerLookUp = () => {
         <h2 className="text-dark">Customer Lookup</h2>
         <div className="row d-flex justify-content-center">
           <div className="col-12 d-flex justify-content-center">
-            <div className="num-box m-2">
+            <div className="m-2">
               <button
                 className="num-box btn btn-dark "
                 value={1}
@@ -124,19 +124,19 @@ const CustomerLookUp = () => {
                 1
               </button>
             </div>
-            <div className="num-box m-2">
+
+            <div className="m-2">
               <button
-                className="  text-large   num-box btn btn-dark "
+                className="num-box btn btn-dark "
                 value={2}
                 onClick={addToNumber}
               >
                 2
               </button>
             </div>
-
-            <div className="num-box m-2">
+            <div className="m-2">
               <button
-                className=" text-large num-box btn btn-dark "
+                className="num-box btn btn-dark "
                 value={3}
                 onClick={addToNumber}
               >
@@ -149,7 +149,7 @@ const CustomerLookUp = () => {
           <div className="col-12 d-flex justify-content-center">
             <div className="m-2">
               <button
-                className=" text-large num-box btn btn-dark "
+                className="num-box btn btn-dark "
                 value={4}
                 onClick={addToNumber}
               >
@@ -159,7 +159,7 @@ const CustomerLookUp = () => {
 
             <div className="m-2">
               <button
-                className=" my-1 p-md-4 text-large   num-box btn btn-dark "
+                className="num-box btn btn-dark "
                 value={5}
                 onClick={addToNumber}
               >
@@ -168,7 +168,7 @@ const CustomerLookUp = () => {
             </div>
             <div className="m-2">
               <button
-                className=" my-1 p-md-4 text-large   num-box btn btn-dark "
+                className="num-box btn btn-dark "
                 value={6}
                 onClick={addToNumber}
               >
@@ -181,7 +181,7 @@ const CustomerLookUp = () => {
           <div className="col-12  d-flex justify-content-center">
             <div className="m-2">
               <button
-                className="text-large num-box btn btn-dark "
+                className=" num-box btn btn-dark "
                 value={7}
                 onClick={addToNumber}
               >
@@ -190,7 +190,7 @@ const CustomerLookUp = () => {
             </div>
             <div className="m-2">
               <button
-                className=" my-1 p-md-4 text-large   num-box btn btn-dark "
+                className="num-box btn btn-dark "
                 value={8}
                 onClick={addToNumber}
               >
@@ -199,7 +199,7 @@ const CustomerLookUp = () => {
             </div>
             <div className="m-2">
               <button
-                className=" my-1 p-md-4 text-large   num-box btn btn-dark "
+                className="num-box btn btn-dark "
                 value={9}
                 onClick={addToNumber}
               >
