@@ -35,6 +35,9 @@ const CustomerModal = () => {
   const addPunch = () => {
     api.put("customers/addPunch/" + customerPhone);
   };
+  const redeamPunch = () => {
+    api.put("customers/usePunch/" + customerPhone);
+  };
   const handelEditCustomerInfo = async () => {
     const data = {
       phone: customerphone,
@@ -108,9 +111,19 @@ const CustomerModal = () => {
               </div>
             </div>
             <div>
-              <button onClick={addPunch} className="btn btn-primary">
-                Add Punch
-              </button>
+              <span className="p-2">
+                <button onClick={addPunch} className="btn btn-primary">
+                  Add Punch
+                </button>
+              </span>
+              <span className="p-2">
+                <button
+                  onClick={redeamPunch}
+                  className="btn btn-outline-success"
+                >
+                  Use points * 10
+                </button>
+              </span>
             </div>
           </div>
           <div className="modal-footer">

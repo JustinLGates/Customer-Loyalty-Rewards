@@ -1,5 +1,6 @@
 import { dbContext } from "../db/DbContext";
 import { BadRequest } from "../utils/Errors";
+import { current } from "@reduxjs/toolkit";
 
 class CustomersService {
   async create(data) {
@@ -33,6 +34,28 @@ class CustomersService {
       data
     );
     return result;
+  }
+  async usePunch(phoneNumber, creatorEmail) {
+    let currentCustomer = await this.find(phoneNumber, creatorEmail);
+    if (currentCustomer.length !== 1) {
+      throw new BadRequest("invalid phone number");
+    }
+    // @ts-ignore
+    if (currentCustomer[0].points >= 10) {
+      let points = currentCustomer[0].points - 10;
+      const data = {
+        phoneNumber: phoneNumber,
+        creatorEmail: creatorEmail,
+        points: points,
+      };
+      let result = await dbContext.Customer.findOneAndUpdate(
+        { creatorEmail: creatorEmail, phoneNumber: phoneNumber },
+        data
+      );
+      return result;
+    } else {
+      throw new BadRequest("not enough points");
+    }
   }
   edit(phoneNumber, creatorEmail, data) {
     let result = dbContext.Customer.findOneAndUpdate(

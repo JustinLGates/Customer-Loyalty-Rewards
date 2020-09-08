@@ -12,6 +12,7 @@ export class CustomersController extends BaseController {
       .post("", this.create)
       .get("", this.find)
       .put("/addPunch/:phoneNumber", this.addPunch)
+      .put("/usePunch/:phoneNumber", this.usePunch)
       .put("/:phoneNumber", this.edit)
       .delete("/:phoneNumber", this.delete);
   }
@@ -42,6 +43,17 @@ export class CustomersController extends BaseController {
   async addPunch(req, res, next) {
     try {
       let data = await customersService.addPunch(
+        req.params.phoneNumber,
+        req.userInfo.email
+      );
+      res.send(data);
+    } catch (error) {
+      next(error);
+    }
+  }
+  async usePunch(req, res, next) {
+    try {
+      let data = await customersService.usePunch(
         req.params.phoneNumber,
         req.userInfo.email
       );
