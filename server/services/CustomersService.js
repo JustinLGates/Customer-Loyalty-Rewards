@@ -7,7 +7,6 @@ class CustomersService {
     return res;
   }
   find(phoneNumQuery, email) {
-    console.log(email);
     let data = dbContext.Customer.find({
       creatorEmail: email,
       phoneNumber: { $regex: ".*" + phoneNumQuery + ".*" },
@@ -17,22 +16,22 @@ class CustomersService {
     }
     return data;
   }
-  findById(id) {
-    let data = dbContext.Customer.find({ _id: id });
-    if (!data) {
-      throw new BadRequest("Invalid id");
-    }
-    return data;
-  }
-  edit(id, data) {
-    let result = dbContext.Customer.findOneAndUpdate({ _id: id }, data);
+  edit(phoneNumber, creatorEmail, data) {
+    let result = dbContext.Customer.findOneAndUpdate(
+      { creatorEmail: creatorEmail, phoneNumber: phoneNumber },
+      data
+    );
     if (!result) {
       throw new BadRequest("Invalid id");
     }
     return result;
   }
-  delete(id) {
-    let data = dbContext.Customer.findByIdAndDelete({ _id: id });
+  delete(phoneNumber, creatorEmail) {
+    console.log(phoneNumber + " - " + creatorEmail);
+    let data = dbContext.Customer.findOneAndDelete({
+      creatorEmail: creatorEmail,
+      phoneNumber: phoneNumber,
+    });
     if (!data) {
       throw new BadRequest("Invalid Id");
     }

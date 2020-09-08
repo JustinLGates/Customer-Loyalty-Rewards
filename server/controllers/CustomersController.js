@@ -11,14 +11,12 @@ export class CustomersController extends BaseController {
       .use(auth0Provider.getAuthorizedUserInfo)
       .post("", this.create)
       .get("", this.find)
-      .get("/:id", this.findById)
-      .put("/:id", this.edit)
-      .delete("/:id", this.delete);
+      .put("/:phoneNumber", this.edit)
+      .delete("/:phoneNumber", this.delete);
   }
   async create(req, res, next) {
     try {
       req.body.creatorEmail = req.userInfo.email;
-      console.log(req.body.creatorEmail);
       let data = await customersService.create(req.body);
       if (req.UserInfo) {
         res.send(JSON.stringify(req.UserInfo));
@@ -40,17 +38,16 @@ export class CustomersController extends BaseController {
       next(error);
     }
   }
-  async findById(req, res, next) {
-    try {
-      let data = await customersService.findById(req.params.id);
-      res.send(data);
-    } catch (error) {
-      next(error);
-    }
-  }
+
   async edit(req, res, next) {
     try {
-      let data = await customersService.edit(req.params.id, req.body);
+      req.body.phoneNumber = req.body.phone || req.params.phoneNumber;
+      console.log(JSON.stringify(req.body.phone));
+      let data = await customersService.edit(
+        req.params.phoneNumber,
+        req.userInfo.email,
+        req.body
+      );
       res.send(data);
     } catch (error) {
       next(error);
@@ -58,7 +55,10 @@ export class CustomersController extends BaseController {
   }
   async delete(req, res, next) {
     try {
-      let data = await customersService.delete(req.params.id);
+      let data = await customersService.delete(
+        req.params.phoneNumber,
+        req.userInfo.email
+      );
       res.send(data);
     } catch (error) {
       next(error);

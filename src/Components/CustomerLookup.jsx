@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import { api } from "../axios";
 import CustomerModal from "./CustomerModal";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  setName,
+  setPhone,
+  setPoints,
+  // selectCustomerPhone,
+} from "../Components/Example/Slice";
 
-let phoneNumber = ""; //(123)123-3456
+let phoneNumber = "";
 let formatPhoneNumber = (str) => {
   if (str == null) {
     return "";
@@ -30,16 +37,20 @@ let formatPhoneNumber = (str) => {
 };
 
 const CustomerLookUp = () => {
+  const dispatch = useDispatch();
+  // const selectedCustomerPhone = useSelector(selectCustomerPhone);
   const [customers, setcustomers] = useState([]);
 
   const [phoneNumberQuery, setPhoneNumberQuery] = useState("");
 
-  const [selectedCustomer, setSelectedCustomer] = useState({
-    name: "",
-    phone: "",
-    creatorEmail: "",
-    points: "",
-  });
+  const setSelectedCustomer = (customer) => {
+    console.log("setting customer to: " + JSON.stringify(customer));
+    dispatch(setName(customer.name));
+
+    dispatch(setPhone(customer.phone));
+
+    dispatch(setPoints(customer.points));
+  };
   const [nameFeild, setnameFeild] = useState("");
   const [nameFeildVisable, setnameFeildVisable] = useState(false);
 
@@ -298,8 +309,7 @@ const CustomerLookUp = () => {
                       onClick={() =>
                         setSelectedCustomer({
                           name: customer.name,
-                          phone: formatPhoneNumber(customer.PhoneNumber),
-                          creatorEmail: "",
+                          phone: customer.phoneNumber,
                           points: customer.points,
                         })
                       }
@@ -335,7 +345,7 @@ const CustomerLookUp = () => {
       </div>
       <div className="row">
         <div className="col-12">
-          <CustomerModal customer={selectedCustomer} />
+          <CustomerModal />
         </div>
       </div>
     </div>
