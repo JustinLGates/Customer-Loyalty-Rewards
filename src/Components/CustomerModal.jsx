@@ -32,7 +32,9 @@ const CustomerModal = () => {
       setcustomerphone(event.target.value);
     }
   };
-
+  const addPunch = () => {
+    api.put("customers/addPunch/" + customerPhone);
+  };
   const handelEditCustomerInfo = async () => {
     const data = {
       phone: customerphone,
@@ -106,7 +108,9 @@ const CustomerModal = () => {
               </div>
             </div>
             <div>
-              <button className="btn btn-primary">Add Punch</button>
+              <button onClick={addPunch} className="btn btn-primary">
+                Add Punch
+              </button>
             </div>
           </div>
           <div className="modal-footer">

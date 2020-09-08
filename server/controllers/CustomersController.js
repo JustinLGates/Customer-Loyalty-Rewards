@@ -11,6 +11,7 @@ export class CustomersController extends BaseController {
       .use(auth0Provider.getAuthorizedUserInfo)
       .post("", this.create)
       .get("", this.find)
+      .put("/addPunch/:phoneNumber", this.addPunch)
       .put("/:phoneNumber", this.edit)
       .delete("/:phoneNumber", this.delete);
   }
@@ -38,11 +39,21 @@ export class CustomersController extends BaseController {
       next(error);
     }
   }
-
+  async addPunch(req, res, next) {
+    try {
+      let data = await customersService.addPunch(
+        req.params.phoneNumber,
+        req.userInfo.email
+      );
+      res.send(data);
+    } catch (error) {
+      next(error);
+    }
+  }
   async edit(req, res, next) {
     try {
       req.body.phoneNumber = req.body.phone || req.params.phoneNumber;
-      console.log(JSON.stringify(req.body.phone));
+
       let data = await customersService.edit(
         req.params.phoneNumber,
         req.userInfo.email,

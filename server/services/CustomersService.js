@@ -6,8 +6,8 @@ class CustomersService {
     let res = await dbContext.Customer.create(data);
     return res;
   }
-  find(phoneNumQuery, email) {
-    let data = dbContext.Customer.find({
+  async find(phoneNumQuery, email) {
+    let data = await dbContext.Customer.find({
       creatorEmail: email,
       phoneNumber: { $regex: ".*" + phoneNumQuery + ".*" },
     });
@@ -15,6 +15,24 @@ class CustomersService {
       throw new BadRequest("No data");
     }
     return data;
+  }
+  async addPunch(phoneNumber, creatorEmail) {
+    let currentCustomer = await this.find(phoneNumber, creatorEmail);
+    if (currentCustomer.length !== 1) {
+      throw new BadRequest("invalid phone number");
+    }
+    // @ts-ignore
+    let points = currentCustomer[0].points + 1;
+    const data = {
+      phoneNumber: phoneNumber,
+      creatorEmail: creatorEmail,
+      points: points,
+    };
+    let result = await dbContext.Customer.findOneAndUpdate(
+      { creatorEmail: creatorEmail, phoneNumber: phoneNumber },
+      data
+    );
+    return result;
   }
   edit(phoneNumber, creatorEmail, data) {
     let result = dbContext.Customer.findOneAndUpdate(
